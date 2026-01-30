@@ -107,7 +107,6 @@
         footer { margin-top: 20px; text-align: center; font-size: 0.65em; color: var(--text-gray); }
         footer a { color: var(--brand-cyan); text-decoration: none; font-weight: bold; }
 
-        /* Easter Egg Style */
         #easter-egg {
             position: fixed;
             top: 50%;
@@ -136,7 +135,7 @@
 </head>
 <body>
 
-<div id="easter-egg">Powered by<br><span style="color:white; font-size: 0.9em;">Werbedruck-GM</span><br><span style="color:white">DER MEISTER</span></div>
+<div id="easter-egg">Powered by<br><span style="color:white; font-size: 0.85em;">Werbedruck-GM</span><br><span style="color:white">DER MEISTER</span></div>
 
 <div class="card">
     <div class="top-controls">
@@ -162,7 +161,7 @@
         <img src="GS-Logo.jpg" alt="Gröner-Schulze">
     </div>
     
-    <div class="app-title">Original Rollen-Meter</div>
+    <div class="app-title" id="main_title">Original Rollen-Meter</div>
     <div class="divider"></div>
 
     <div class="input-group">
@@ -189,7 +188,7 @@
     
     <footer>
         <strong>Gröner-Schulze</strong><br>
-        <span id="lbl_footer">© 2024-2025 | V1.0 Multi-Unit & Bluetooth</span><br>
+        <span id="lbl_footer">© 2024-2026 | V1.1 Multi-Unit & Bluetooth</span><br>
         <div style="margin-top: 8px;">
             <a href="https://www.groener-schulze.com/impressum" target="_blank">Impressum</a> | 
             <a href="https://www.groener-schulze.com/datenschutzbestimmungen" target="_blank">Datenschutz</a>
@@ -204,7 +203,6 @@ let clickTimer;
 function handleBTClick() {
     clickCount++;
     clearTimeout(clickTimer);
-    
     if (clickCount === 5) {
         showMasterGreeting();
         clickCount = 0;
@@ -221,24 +219,35 @@ function showMasterGreeting() {
 }
 
 async function connectBluetooth() {
-    if (!navigator.bluetooth) { alert("Bluetooth wird von diesem Browser/Gerät nicht unterstützt."); return; }
+    if (!navigator.bluetooth) return;
     try { await navigator.bluetooth.requestDevice({ acceptAllDevices: true }); } catch (e) {}
 }
 
 const translations = {
-    de: { D: "Rollendurchmesser", d: "Kerndurchmesser", s: "Materialstärke", res: "Material auf der Rolle", bt: "MESS-GERÄT VERBINDEN" },
-    en: { D: "Roll Diameter", d: "Core Diameter", s: "Material Thickness", res: "Material on Roll", bt: "CONNECT CALIPER" }
+    de: { title: "Original Rollen-Meter", D: "Rollendurchmesser", d: "Kerndurchmesser", s: "Materialstärke", res: "Material auf der Rolle", bt: "MESS-GERÄT VERBINDEN" },
+    en: { title: "Original Roll Meter", D: "Roll Diameter", d: "Core Diameter", s: "Material Thickness", res: "Material on Roll", bt: "CONNECT CALIPER" },
+    fr: { title: "Mètre de Rouleau Original", D: "Diamètre du rouleau", d: "Diamètre du noyau", s: "Épaisseur du matériau", res: "Matériel sur le rouleau", bt: "CONNECTER L'APPAREIL" },
+    nl: { title: "Originele Rol-Meter", D: "Roldiameter", d: "Kerndiameter", s: "Materiaaldikte", res: "Materiaal op de rol", bt: "APPARAAT VERBINDEN" },
+    pl: { title: "Oryginalny Rol-Metr", D: "Średnica rolki", d: "Średnica rdzenia", s: "Grubość materiału", res: "Materiał na rolce", bt: "POŁĄCZ URZĄDZENIE" },
+    es: { title: "Metro de Rollo Original", D: "Diámetro del rollo", d: "Diámetro del núcleo", s: "Espesor del material", res: "Material en el rollo", bt: "CONECTAR APARATO" },
+    it: { title: "Metro per Rotoli Originale", D: "Diametro del rotolo", d: "Diametro dell'anima", s: "Spessore del materiale", res: "Materiale sul rotolo", bt: "COLLEGA DISPOSITIVO" },
+    hu: { title: "Eredeti Tekercsmérő", D: "Tekercs átmérő", d: "Mag átmérő", s: "Anyagvastagság", res: "Anyag a tekercsen", bt: "ESZKÖZ CSATLAKOZTATÁSA" },
+    ru: { title: "Оригинальный Рулономер", D: "Диаметр рулона", d: "Диаметр втулки", s: "Толщина материала", res: "Материал на рулоне", bt: "ПОДКЛЮЧИТЬ ПРИБОР" },
+    ja: { title: "オリジナル・ロールメーター", D: "ロール径", d: "芯径", s: "材料の厚み", res: "ロール上の材料", bt: "デバイスを接続する" }
 };
 
 function changeLang() {
     const l = document.getElementById('langPicker').value;
     const u = document.getElementById('unitPicker').value;
     const unitText = "(" + u + ")";
-    document.getElementById('lbl_D').innerText = (translations[l]?.D || translations['de'].D) + " " + unitText;
-    document.getElementById('lbl_d').innerText = (translations[l]?.d || translations['de'].d) + " " + unitText;
-    document.getElementById('lbl_s').innerText = (translations[l]?.s || translations['de'].s) + " " + unitText;
-    document.getElementById('lbl_res_text').innerText = translations[l]?.res || translations['de'].res;
-    document.getElementById('lbl_bt_text').innerText = translations[l]?.bt || translations['de'].bt;
+    const t = translations[l] || translations['de'];
+
+    document.getElementById('main_title').innerText = t.title;
+    document.getElementById('lbl_D').innerText = t.D + " " + unitText;
+    document.getElementById('lbl_d').innerText = t.d + " " + unitText;
+    document.getElementById('lbl_s').innerText = t.s + " " + unitText;
+    document.getElementById('lbl_res_text').innerText = t.res;
+    document.getElementById('lbl_bt_text').innerText = t.bt;
 }
 
 function calc() {
@@ -247,13 +256,36 @@ function calc() {
     let D = parseFloat(document.getElementById('D').value.replace(',', '.'));
     let d = parseFloat(document.getElementById('d').value.replace(',', '.'));
     let s = parseFloat(document.getElementById('s').value.replace(',', '.'));
+    
     if(D && d && s && D > d) {
         if(unit === "inc") { D *= 25.4; d *= 25.4; s *= 25.4; }
         const L = (Math.PI * (Math.pow(D, 2) - Math.pow(d, 2))) / (4000 * s);
         document.getElementById('res').innerText = L.toFixed(2) + " m";
-    } else { document.getElementById('res').innerText = "0.00 m"; }
+    } else { 
+        document.getElementById('res').innerText = "0.00 m"; 
+    }
 }
-calc();
+
+// NEU: Erkennt die Browser-Sprache beim Start
+function initApp() {
+    const userLang = navigator.language.substring(0, 2).toLowerCase();
+    const langPicker = document.getElementById('langPicker');
+    
+    // Prüfen, ob die Sprache im Dropdown existiert
+    let found = false;
+    for (let i = 0; i < langPicker.options.length; i++) {
+        if (langPicker.options[i].value === userLang) {
+            langPicker.selectedIndex = i;
+            found = true;
+            break;
+        }
+    }
+    
+    calc();
+}
+
+// Startet die Initialisierung
+initApp();
 </script>
 </body>
 </html>
