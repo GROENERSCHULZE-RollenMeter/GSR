@@ -3,13 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>WGM Master-Tool | GRÖNER SCHULZE</title>
+    <title>GS Master-Tool | Floating Edition</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
-            --wd-accent: #3b82f6; --wd-blue: #3b82f6; --wd-dark: #f8fafc;
-            --bg-body: #0f172a; --bg-shell: #1e293b; --card-bg: #334155;
-            --icon-bg: #1e293b; --label-color: #ffffff; --app-width: 320px;
+            /* GS-DNA: Dunkle Shell auf weißem Grund */
+            --wd-accent: #3b82f6; 
+            --wd-blue: #3b82f6;
+            --wd-dark: #ffffff; /* Text in der Shell weiß */
+            --bg-body: #ffffff; /* Hintergrund außerhalb der App weiß */
+            --bg-shell: #1e293b; /* Die App-Shell selbst dunkelblau */
+            --card-bg: #334155; 
+            --icon-bg: #1e293b; 
+            --label-color: #ffffff;
+            --border-color: #475569;
+            --app-width: 320px;
         }
         html, body { 
             height: 100%; margin: 0; padding: 0; background: var(--bg-body); 
@@ -18,17 +26,18 @@
         }
         .app-shell {
             width: var(--app-width); height: 95vh; max-height: 780px;
-            background: var(--bg-shell); color: #ffffff;
+            background: var(--bg-shell); color: var(--wd-dark);
             display: flex; flex-direction: column; overflow: hidden;
             border-radius: 40px; position: relative; 
-            box-shadow: 0 40px 100px rgba(0,0,0,0.5); 
+            /* Starker Schatten für den Schwebe-Effekt auf Weiß */
+            box-shadow: 0 50px 100px rgba(15, 23, 42, 0.4); 
         }
         @media (max-width: 380px) { .app-shell { width: 94vw; height: 96vh; } }
         
         #login-overlay { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(30,41,59,0.98); display: none; 
-            flex-direction: column; justify-content: center; align-items: center; 
+            background: rgba(15, 23, 42, 0.98); 
+            display: none; flex-direction: column; justify-content: center; align-items: center; 
             z-index: 3000; backdrop-filter: blur(15px); 
         }
         #login-overlay .btn-action { max-width: 160px; height: 48px !important; flex: none; font-size: 0.8rem; }
@@ -45,7 +54,7 @@
         .assist-overlay p { margin: 0; font-size: 0.72rem; font-weight: 700; line-height: 1.5; }
 
         .top-nav { display: flex; justify-content: flex-end; padding: 25px 20px 5px; height: 35px; z-index: 2500; position: relative; }
-        select { background: #334155; color: white; border: 1px solid #475569; padding: 6px; border-radius: 8px; font-weight: 800; font-size: 0.65rem; outline: none; }
+        select { background: var(--card-bg); color: #ffffff; border: 1px solid var(--border-color); padding: 6px; border-radius: 8px; font-weight: 800; font-size: 0.65rem; outline: none; }
         
         .logo-area { text-align: center; padding: 5px 20px; height: 160px; position: relative; }
         .logo-area img { max-width: 145px; cursor: pointer; }
@@ -55,17 +64,16 @@
 
         .view { display: none; flex-direction: column; padding: 10px 20px; flex: 1; overflow-y: auto; }
         .view.active { display: flex; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .card { 
             background: var(--card-bg); height: 78px; border-radius: 22px; padding: 0 16px; 
             display: flex; align-items: center; gap: 14px; cursor: pointer; margin-bottom: 12px; 
             border: 1px solid rgba(255,255,255,0.05); 
-            box-shadow: 0 12px 30px rgba(0,0,0,0.3); 
+            box-shadow: 0 12px 30px rgba(0,0,0,0.2); 
             transition: transform 0.2s;
         }
         .card:active { transform: translateY(2px); }
-        .icon { width: 44px; height: 44px; background: rgba(15,23,42,0.4); color: var(--wd-accent); border-radius: 14px; display: flex; align-items: center; justify-content: center; }
+        .icon { width: 44px; height: 44px; background: rgba(15, 23, 42, 0.4); color: var(--wd-accent); border-radius: 14px; display: flex; align-items: center; justify-content: center; }
         .card-text h2 { margin: 0; font-size: 0.82rem; font-weight: 900; text-transform: uppercase; color: #ffffff; }
         .card-text p { margin: 2px 0 0; font-size: 0.62rem; color: #94a3b8; font-weight: 600; }
 
@@ -75,10 +83,10 @@
 
         .input-box { margin-bottom: 12px; height: 65px; position: relative; }
         .label { font-size: 0.6rem; color: var(--label-color); font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 4px; }
-        input, select.in-view { width: 100%; height: 42px; padding: 0 12px; border-radius: 12px; border: 2.5px solid #334155; font-size: 0.88rem; font-weight: 800; outline: none; background: #0f172a; color: white; box-sizing: border-box; }
+        input, select.in-view { width: 100%; height: 42px; padding: 0 12px; border-radius: 12px; border: 2.5px solid var(--card-bg); font-size: 0.88rem; font-weight: 800; outline: none; background: #0f172a; color: white; box-sizing: border-box; }
         input:focus { border: 3.5px solid var(--wd-accent) !important; }
 
-        .res-card { background: var(--wd-accent); height: 85px; border-radius: 22px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 10px 0; color: white; box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4); }
+        .res-card { background: var(--wd-accent); height: 85px; border-radius: 22px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 10px 0; color: white; box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3); }
         .res-num { font-size: 1.8rem; font-weight: 900; }
         .res-info { font-size: 0.58rem; font-weight: 800; text-transform: uppercase; opacity: 0.9; }
 
@@ -88,13 +96,13 @@
         
         .btn-reset { 
             width: 44px; height: 44px; border-radius: 12px; background: #1e293b; color: #94a3b8; 
-            border: 1.5px solid #334155; cursor: pointer; display: flex; align-items: center; justify-content: center; flex: none; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: all 0.2s;
+            border: 1.5px solid var(--border-color); cursor: pointer; display: flex; align-items: center; justify-content: center; flex: none; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.2s;
         }
         .btn-reset:active { color: var(--wd-accent); }
 
         .admin-scroll { flex: 1; overflow-y: auto; padding-right: 5px; }
-        .admin-section { margin-bottom: 22px; border-bottom: 1px solid #334155; padding-bottom: 12px; }
+        .admin-section { margin-bottom: 22px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; }
         .admin-section h4 { font-size: 0.68rem; color: var(--wd-accent); text-transform: uppercase; margin-bottom: 10px; border-left: 3px solid var(--wd-accent); padding-left: 8px; }
 
         footer { text-align: center; padding: 10px 20px 25px; font-size: 0.58rem; color: #64748b; margin-top: auto; }
@@ -151,9 +159,8 @@
         <div class="mod-header"><div class="back-btn" onclick="go('main')"><i data-lucide="lock"></i> <span id="t-admin_exit">ADMIN VERLASSEN</span></div></div>
         <div class="admin-scroll">
             <div id="admin-global-config" class="admin-section">
-                <h4>Globale DNA (V4.0.2-GS)</h4>
-                <label class="label">Hauptfarbe (Akzent)</label><input type="color" id="cfg-color" onchange="applyAdminLive()">
-                <label class="label" style="margin-top:10px;">Firma</label><input type="text" id="cfg-brand" oninput="applyAdminLive()">
+                <h4>Globale DNA (V4.0.4)</h4>
+                <label class="label">Firma</label><input type="text" id="cfg-brand" oninput="applyAdminLive()">
                 <label class="label" style="margin-top:10px;">Impressum URL</label><input type="text" id="cfg-link1" oninput="applyAdminLive()">
                 <label class="label" style="margin-top:10px;">Datenschutz URL</label><input type="text" id="cfg-link2" oninput="applyAdminLive()">
             </div>
@@ -167,23 +174,14 @@
 
     <footer id="app-footer">
         <strong id="f-brand">Gröner Schulze</strong>
-        <span id="f-ver">V4.0.2 | GS-Edition</span>
+        <span id="f-ver">V4.0.4 | GS-Float Edition</span>
         <div class="footer-links"><a id="f-l1" href="#">Impressum</a> | <a id="f-l2" href="#">Datenschutz</a></div>
     </footer>
 </div>
 
 <script>
-    const i18n = {
-        de: {
-            mainH: "GS Werbetechnik Tools", admin_exit: "ADMIN VERLASSEN", bt_btn: "BT MESSCHIEBER KOPPELN",
-            rollen_h: "Rollen-Meter", nutzen_h: "Nutzen-Rechner", gew_h: "Gewichts-Rechner", wind_h: "Windlast-Rechner", hohl_h: "Hohlsaum-Rechner",
-            rollen_p: "Längen präzise berechnen", nutzen_p: "Plattennutzung optimieren", gew_p: "Materialgewicht ermitteln", wind_p: "Statik-Check für Außenwerbung", hohl_p: "Banner-Zulagen berechnen",
-            back_r: "ZURÜCK", back_n: "ZURÜCK", back_g: "ZURÜCK", back_w: "ZURÜCK", back_h: "ZURÜCK",
-            rD_l: "Durchmesser Außen", rd_l: "Kerndurchmesser", rs_l: "Materialstärke", res_l: "Material auf der Rolle",
-            h_rD: "Gesamtrolle messen.", h_rd: "Hülse messen.", h_rs: "Materialdicke."
-        }
-    };
     let activeView = 'main', helpOn = false, clks = 0, tmr, adminCtx = 'main';
+    const i18n = { de: { mainH: "GS Werbetechnik Tools", admin_exit: "ADMIN VERLASSEN", bt_btn: "BT MESSCHIEBER KOPPELN", rollen_h: "Rollen-Meter", rollen_p: "Längen berechnen", back_r: "ZURÜCK", rD_l: "Durchmesser Außen", rd_l: "Kerndurchmesser", rs_l: "Materialstärke", res_l: "Material auf der Rolle", nutzen_h: "Nutzen-Rechner", gew_h: "Gewichts-Rechner", wind_h: "Windlast-Rechner", hohl_h: "Hohlsaum-Rechner" } };
 
     function t(k) { return i18n.de[k] || "!!"; }
 
@@ -197,7 +195,7 @@
             al.style.display = 'none'; tit.style.display = 'block';
         }
         activeView = v; helpOn = false; document.getElementById('assist-overlay').style.display = 'none';
-        document.getElementById(v === 'admin' ? 'view-admin' : 'view-' + v).classList.add('active');
+        document.getElementById(v === 'admin' ? 'view-admin' : 'view-' + (v==='main'?'main':v)).classList.add('active');
         updateUI();
     }
 
@@ -211,45 +209,35 @@
     function jump(nextId) { const n = document.getElementById(nextId); if(n) n.focus(); }
 
     function updateUI() {
-        const u = document.getElementById('uG').value;
         if(activeView !== 'admin') document.getElementById('app-title').innerText = (activeView === 'main') ? t('mainH') : t(activeView + '_h');
-        document.querySelectorAll('[id^="t-"]').forEach(el => {
-            const k = el.id.replace('t-', ''); el.innerText = t(k);
-            if(el.hasAttribute('data-u')) el.innerText += ` (${u})`;
-        });
+        document.querySelectorAll('[id^="t-"]').forEach(el => { el.innerText = t(el.id.replace('t-', '')); });
         if (window.lucide) lucide.createIcons();
     }
 
     function resetForm(v) { document.getElementById('view-' + v).querySelectorAll('input').forEach(i => i.value = i.defaultValue || ""); }
-    function calcR() { 
-        let D=parseFloat(document.getElementById('rD').value||0), d=parseFloat(document.getElementById('rd').value||0), s=parseFloat(document.getElementById('rs').value||0); 
-        if(D && d && s) document.getElementById('resR').innerText = ((Math.PI * (Math.pow(D, 2) - Math.pow(d, 2))) / (4 * s) / 1000).toFixed(2) + " m"; 
-    }
+    function calcR() { let D=parseFloat(document.getElementById('rD').value||0), d=parseFloat(document.getElementById('rd').value||0), s=parseFloat(document.getElementById('rs').value||0); if(D && d && s) document.getElementById('resR').innerText = ((Math.PI * (Math.pow(D, 2) - Math.pow(d, 2))) / (4 * s) / 1000).toFixed(2) + " m"; }
 
     document.getElementById('logo-trigger').addEventListener('click', () => { clks++; clearTimeout(tmr); if(clks >= 5) { document.getElementById('login-overlay').style.display='flex'; clks=0; } tmr=setTimeout(()=>clks=0, 2000); });
     function checkAccess() { if(document.getElementById('master-pin').value === "7805") { document.getElementById('login-overlay').style.display='none'; adminCtx = activeView; go('admin'); } }
     function closeLogin() { document.getElementById('login-overlay').style.display='none'; }
 
     function openAdmin() {
-        const r = document.documentElement;
-        document.getElementById('cfg-color').value = getComputedStyle(r).getPropertyValue('--wd-accent').trim();
+        const l=document.getElementById('admin-fields-list'), ctx=adminCtx; l.innerHTML='';
+        const list=(ctx==='main')?['rollen_h','nutzen_h']:[ctx+'_h'];
+        list.forEach(k=>{ if(i18n.de[k]) l.innerHTML+=`<label class="label">${k}</label><input type="text" id="cfg-${k}" value="${i18n.de[k]}" oninput="applyAdminLive()" style="margin-bottom:12px;">`; });
         document.getElementById('cfg-brand').value = document.getElementById('f-brand').innerText;
     }
 
     function applyAdminLive() {
-        const r = document.documentElement;
-        r.style.setProperty('--wd-accent', document.getElementById('cfg-color').value);
         document.getElementById('f-brand').innerText = document.getElementById('cfg-brand').value;
+        document.querySelectorAll('[id^="cfg-"]').forEach(el => { const k=el.id.replace('cfg-',''); if(i18n.de[k]!==undefined) i18n.de[k]=el.value; });
         updateUI();
     }
 
-    function saveDNA() { localStorage.setItem('gs_v402', JSON.stringify({ c: document.getElementById('cfg-color').value, f: document.getElementById('f-brand').innerText })); alert("DNA VERSIEGELT"); }
+    function saveDNA() { localStorage.setItem('gs_v404', JSON.stringify({ f: document.getElementById('f-brand').innerText })); alert("DNA VERSIEGELT"); }
 
     window.onload = () => {
-        const s = localStorage.getItem('gs_v402'); if(s) { 
-            const d = JSON.parse(s); const r = document.documentElement;
-            r.style.setProperty('--wd-accent', d.c); document.getElementById('f-brand').innerText = d.f; 
-        }
+        const s = localStorage.getItem('gs_v404'); if(s) { document.getElementById('f-brand').innerText = JSON.parse(s).f; }
         updateUI();
     };
 </script>
