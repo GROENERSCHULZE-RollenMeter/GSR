@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Werbedruck-GM Tools V2.2.5</title>
+    <title>Werbetechniker-Toolbox | WGM v2.2.5</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
@@ -24,36 +24,49 @@
             border-radius: 50px; position: relative; 
             box-shadow: 0 30px 60px rgba(0,0,0,0.25); 
         }
-        #egg-popup { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(14, 29, 58, 0.98); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(8px); }
-        .egg-content { background: var(--brand-navy); border: 2px solid var(--brand-cyan); padding: 30px 20px; border-radius: 25px; text-align: center; width: 80%; }
+        #egg-popup, #info-popup { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(14, 29, 58, 0.98); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(8px); }
+        .popup-content { background: var(--brand-navy); border: 2px solid var(--brand-cyan); padding: 25px; border-radius: 25px; text-align: center; width: 85%; font-size: 0.75rem; }
+        
         .top-nav { display: flex; justify-content: space-between; padding: 35px 25px 5px; }
-        select { background: white; border: none; padding: 3px 8px; border-radius: 6px; font-weight: 800; font-size: 0.65rem; color: var(--brand-navy); outline: none; }
+        select { background: white; border: none; padding: 4px 8px; border-radius: 6px; font-weight: 800; font-size: 0.65rem; color: var(--brand-navy); outline: none; }
+        
         .logo-area { text-align: center; padding: 5px 0; }
-        .logo-area img { max-width: 90px; height: auto; margin-bottom: 2px; cursor: pointer; border-radius: 20px; }
-        .logo-area h1 { font-size: 0.85rem; letter-spacing: 0.8px; margin: 0; font-weight: 800; text-transform: uppercase; }
-        .view { display: none; flex-direction: column; padding: 10px 15px; flex: 1; overflow-y: auto; }
+        .logo-area img { max-width: 85px; height: auto; cursor: pointer; border-radius: 15px; margin-bottom: 5px; }
+        .logo-area h1 { font-size: 0.85rem; letter-spacing: 0.8px; margin: 0; font-weight: 800; text-transform: uppercase; color: white; }
+        
+        .view { display: none; flex-direction: column; padding: 10px 18px; flex: 1; overflow-y: auto; }
         .view.active { display: flex; }
-        .card { background: white; border-radius: 18px; padding: 10px 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; color: var(--brand-navy); margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        
+        .card { background: white; border-radius: 18px; padding: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; color: var(--brand-navy); margin-bottom: 10px; width: 100%; box-sizing: border-box; }
         .icon { width: 34px; height: 34px; background: var(--brand-navy); color: var(--brand-cyan); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .card-text h2 { margin: 0; font-size: 0.85rem; font-weight: 800; }
         .card-text p { margin: 0; font-size: 0.55rem; color: #64748b; font-weight: 600; }
-        .input-box { margin-bottom: 6px; }
-        .label { font-size: 0.5rem; color: var(--brand-cyan); font-weight: 800; text-transform: uppercase; margin-bottom: 2px; display: block; }
-        input, select.in-view { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid transparent; font-size: 0.8rem; font-weight: 700; color: var(--brand-navy); background: white; outline: none; }
-        .res-card { background: white; padding: 12px; border-radius: 18px; text-align: center; margin: 8px 0; color: var(--brand-navy); }
+
+        .input-group { margin-bottom: 8px; }
+        .label { font-size: 0.55rem; color: var(--brand-cyan); font-weight: 800; text-transform: uppercase; margin-bottom: 4px; display: block; }
+        input, select.in-view { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid transparent; font-size: 0.85rem; font-weight: 700; color: var(--brand-navy); background: white; outline: none; box-sizing: border-box; }
+        
+        .action-row { display: flex; gap: 8px; margin-bottom: 10px; }
+        .btn-icon { background: rgba(255,255,255,0.1); border: 1px solid var(--brand-cyan); color: white; padding: 8px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex: 1; }
+        
+        .res-card { background: white; padding: 15px; border-radius: 20px; text-align: center; margin-top: 10px; color: var(--brand-navy); }
         .res-num { font-size: 1.8rem; font-weight: 900; color: var(--brand-cyan); display: block; }
-        .res-info { font-size: 0.55rem; color: #718096; font-weight: 800; display: block; text-transform: uppercase; }
-        .back-btn { color: white; display: flex; align-items: center; gap: 4px; cursor: pointer; padding-bottom: 10px; font-weight: 800; font-size: 0.7rem; }
-        footer { text-align: center; padding: 5px 15px 25px; font-size: 0.55rem; color: #94a3b8; margin-top: auto; }
+        .res-info { font-size: 0.6rem; color: #718096; font-weight: 800; text-transform: uppercase; }
+
+        .back-btn { color: white; display: flex; align-items: center; gap: 6px; cursor: pointer; padding-bottom: 15px; font-weight: 800; font-size: 0.75rem; }
+        
+        footer { text-align: center; padding: 10px 15px 30px; font-size: 0.55rem; color: #94a3b8; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); }
+        footer strong { color: white; display: block; margin-bottom: 2px; letter-spacing: 0.5px; }
     </style>
 </head>
 <body>
 
 <div class="app-shell">
-    <div id="egg-popup"><div class="egg-content">Powered by<br><strong style="color:var(--brand-cyan); font-size:1.4rem;">Werbedruck-GM</strong><br><br>DER MEISTER</div></div>
+    <div id="egg-popup"><div class="popup-content">Powered by<br><strong style="color:var(--brand-cyan); font-size:1.2rem;">Werbedruck-GM</strong><br><br>DER MEISTER</div></div>
+    <div id="info-popup" onclick="this.style.display='none'"><div class="popup-content" id="info-text"></div></div>
 
     <div class="top-nav">
-        <select id="uG" onchange="updateAllUnits()"><option value="mm">mm/m/kg</option><option value="inc">inc/ft/lbs</option></select>
+        <select id="uG" onchange="updateUnits()"><option value="mm">METRISCH</option><option value="inc">IMPERIAL</option></select>
         <select id="lG" onchange="changeLang()">
             <option value="de">DE</option><option value="en">EN</option><option value="fr">FR</option>
             <option value="es">ES</option><option value="it">IT</option><option value="nl">NL</option>
@@ -62,66 +75,118 @@
         </select>
     </div>
 
-    <div class="logo-area"><img src="GS-Logo.jpg" id="logo-trigger" alt="Logo"><h1 data-t="mainH">Werbedruck-GM Tools</h1></div>
+    <div class="logo-area">
+        <img src="GS-Logo.jpg" id="logo-trigger" alt="WGM">
+        <h1 data-t="mainH">Werbetechniker-Toolbox</h1>
+    </div>
 
     <main id="main" class="view active">
         <div class="card" onclick="go('rollen')"><div class="icon"><i data-lucide="ruler"></i></div><div class="card-text"><h2 data-t="r_h">Rollen-Meter</h2><p data-t="r_p">Restmeter berechnen</p></div></div>
         <div class="card" onclick="go('nutzen')"><div class="icon"><i data-lucide="layout-grid"></i></div><div class="card-text"><h2 data-t="n_h">Nutzen-Rechner</h2><p data-t="n_p">Schnittplan-Optimierung</p></div></div>
-        <div class="card" onclick="go('gew')"><div class="icon"><i data-lucide="weight"></i></div><div class="card-text"><h2 data-t="g_h">Gewichts-Detektor</h2><p data-t="g_p">Materialdichte Kalkulation</p></div></div>
-        <div class="card" onclick="go('wind')"><div class="icon"><i data-lucide="wind"></i></div><div class="card-text"><h2 data-t="w_h">Windlast-Prüfer</h2><p data-t="w_p">Statik & Mesh-Faktor</p></div></div>
-        <div class="card" onclick="go('hohl')"><div class="icon"><i data-lucide="maximize"></i></div><div class="card-text"><h2 data-t="h_h">Hohlsaum-Profi</h2><p data-t="h_p">Umfang-Zulage</p></div></div>
+        <div class="card" onclick="go('gew')"><div class="icon"><i data-lucide="weight"></i></div><div class="card-text"><h2 data-t="g_h">Gewichts-Detektor</h2><p data-t="g_p">Materialdichte</p></div></div>
+        <div class="card" onclick="go('wind')"><div class="icon"><i data-lucide="wind"></i></div><div class="card-text"><h2 data-t="w_h">Windlast-Prüfer</h2><p data-t="w_p">Statik & Mesh</p></div></div>
+        <div class="card" onclick="go('hohl')"><div class="icon"><i data-lucide="maximize"></i></div><div class="card-text"><h2 data-t="h_h">Hohlsaum-Profi</h2><p data-t="h_p">Banner-Zulage</p></div></div>
     </main>
 
     <div id="view-rollen" class="view">
         <div class="back-btn" onclick="go('main')"><i data-lucide="chevron-left"></i> <span data-t="back">ZURÜCK</span></div>
-        <div class="input-box"><span class="label" data-t="r_d1" data-u>Durchmesser</span><input type="number" id="rD" value="150" oninput="calcR()"></div>
-        <div class="input-box"><span class="label" data-t="r_d2" data-u>Kern</span><input type="number" id="rd" value="76" oninput="calcR()"></div>
-        <div class="input-box"><span class="label" data-t="r_s" data-u>Stärke (µm)</span><input type="number" id="rs" value="150" oninput="calcR()"></div>
+        <div class="action-row">
+            <button class="btn-icon" onclick="showInfo('bt')"><i data-lucide="bluetooth"></i></button>
+            <button class="btn-icon" onclick="showInfo('rollen')"><i data-lucide="info"></i></button>
+        </div>
+        <div class="input-group"><span class="label" data-t="r_d1">Gesamtdurchmesser</span><input type="number" id="rD" value="150" oninput="calcR()"></div>
+        <div class="input-group"><span class="label" data-t="r_d2">Kern</span><input type="number" id="rd" value="76" oninput="calcR()"></div>
+        <div class="input-group"><span class="label" data-t="r_s">Materialstärke (µm)</span><input type="number" id="rs" value="150" oninput="calcR()"></div>
         <div class="res-card"><span id="resR" class="res-num">0.00 m</span><span class="res-info" data-t="res_l">Berechnete Länge</span></div>
     </div>
 
+    <div id="view-nutzen" class="view">
+        <div class="back-btn" onclick="go('main')"><i data-lucide="chevron-left"></i> <span data-t="back">ZURÜCK</span></div>
+        <div class="action-row"><button class="btn-icon" onclick="showInfo('nutzen')"><i data-lucide="info"></i></button></div>
+        <div style="display:flex; gap:8px;">
+            <div class="input-group" style="flex:1;"><span class="label">P-Breite</span><input type="number" id="pW" value="3000" oninput="calcN()"></div>
+            <div class="input-group" style="flex:1;"><span class="label">P-Höhe</span><input type="number" id="pH" value="1500" oninput="calcN()"></div>
+        </div>
+        <div class="input-group"><span class="label">Verschnitt (Gap)</span><input type="number" id="gap" value="2" oninput="calcN()"></div>
+        <div style="display:flex; gap:8px;">
+            <div class="input-group" style="flex:1;"><span class="label">Nutzen B</span><input type="number" id="nW" oninput="calcN()"></div>
+            <div class="input-group" style="flex:1;"><span class="label">Nutzen H</span><input type="number" id="nH" oninput="calcN()"></div>
+        </div>
+        <div class="res-card"><span id="resN" class="res-num">0</span><span class="res-info">Gesamtanzahl Nutzen</span></div>
+    </div>
+
+    <div id="view-gew" class="view">
+        <div class="back-btn" onclick="go('main')"><i data-lucide="chevron-left"></i> <span data-t="back">ZURÜCK</span></div>
+        <div class="action-row"><button class="btn-icon" onclick="showInfo('gew')"><i data-lucide="info"></i></button></div>
+        <div class="input-group"><span class="label">Material Typ</span>
+            <select id="gM" class="in-view" onchange="calcG()">
+                <option value="2.7">Alu massiv</option><option value="1.2">Alu-Verbund</option>
+                <option value="1.19">Acryl</option><option value="0.6">PVC Hartschaum</option>
+            </select>
+        </div>
+        <div class="input-group"><span class="label">Stärke (mm)</span><input type="number" id="gs" value="3" oninput="calcG()"></div>
+        <div class="res-card"><span id="resG" class="res-num">0.00 kg</span><span class="res-info">Gewicht pro m²</span></div>
+    </div>
+
+    <div id="view-wind" class="view">
+        <div class="back-btn" onclick="go('main')"><i data-lucide="chevron-left"></i> <span data-t="back">ZURÜCK</span></div>
+        <div class="action-row"><button class="btn-icon" onclick="showInfo('wind')"><i data-lucide="info"></i></button></div>
+        <div class="input-group"><span class="label">Fläche (m²)</span><input type="number" id="wA" value="1" oninput="calcW()"></div>
+        <div class="input-group"><span class="label">Mesh-Faktor (0.1 - 1.0)</span><input type="number" id="wM" value="1.0" step="0.1" oninput="calcW()"></div>
+        <div class="res-card"><span id="resW" class="res-num">0 N</span><span class="res-info">Windlast bei 120km/h</span></div>
+    </div>
+
+    <div id="view-hohl" class="view">
+        <div class="back-btn" onclick="go('main')"><i data-lucide="chevron-left"></i> <span data-t="back">ZURÜCK</span></div>
+        <div class="action-row"><button class="btn-icon" onclick="showInfo('hohl')"><i data-lucide="info"></i></button></div>
+        <div class="input-group"><span class="label">Rohrdurchmesser</span><input type="number" id="hd" value="30" oninput="calcH()"></div>
+        <div class="res-card"><span id="resH" class="res-num">0 mm</span><span class="res-info">Hohlsaum-Zulage</span></div>
+    </div>
+
     <footer>
-        <strong style="color:white;">WERBEDRUCK GM</strong>
-        <div style="opacity: 0.7;">V2.2.5 | Master-Export | © 2026</div>
+        <strong>GRÖNER-SCHULZE GMBH</strong>
+        <div>V2.2.5 | Master-Code | © 2026</div>
+        <div style="margin-top:5px; opacity:0.6;">IMPRESSUM | DATENSCHUTZ</div>
     </footer>
 </div>
 
 <script>
     const i18n = {
-        de: { mainH: "Werbedruck-GM Tools", back: "ZURÜCK", r_h: "Rollen-Meter", r_p: "Restmeter berechnen", r_d1: "Durchmesser", r_d2: "Kern", r_s: "Materialstärke", res_l: "Berechnete Länge", n_h: "Nutzen-Rechner", n_p: "Schnittplan-Optimierung", g_h: "Gewichts-Detektor", g_p: "Materialgewicht", w_h: "Windlast-Prüfer", w_p: "Statik-Check", h_h: "Hohlsaum-Profi", h_p: "Banner-Zulage" },
-        en: { mainH: "WGM Tools", back: "BACK", r_h: "Roll Meter", r_p: "Length calc", r_d1: "Diameter", r_d2: "Core", r_s: "Thickness", res_l: "Calculated Length", n_h: "Nesting Calc", n_p: "Cut Optimization", g_h: "Weight Detector", g_p: "Material mass", w_h: "Wind Load", w_p: "Static check", h_h: "Hem Pro", h_p: "Banner allowance" }
-        // Ergänzung der weiteren 9 Sprachen analog zur WGM-Matrix...
+        de: { mainH: "Werbetechniker-Toolbox", back: "ZURÜCK", r_h: "Rollen-Meter", r_p: "Restmeter berechnen", r_d1: "Durchmesser", r_d2: "Kern", r_s: "Materialstärke", res_l: "Berechnete Länge", n_h: "Nutzen-Rechner", n_p: "Schnittplan-Optimierung", g_h: "Gewichts-Detektor", g_p: "Materialdichte", w_h: "Windlast-Prüfer", w_p: "Statik & Mesh", h_h: "Hohlsaum-Profi", h_p: "Banner-Zulage" },
+        en: { mainH: "Signmaker Toolbox", back: "BACK", r_h: "Roll Meter", r_p: "Length calculation", r_d1: "Diameter", r_d2: "Core", r_s: "Thickness", res_l: "Result Length", n_h: "Nesting Calc", n_p: "Layout optimization", g_h: "Weight Detector", g_p: "Material density", w_h: "Wind Load", w_p: "Static & Mesh", h_h: "Hem Pro", h_p: "Banner allowance" },
+        fr: { mainH: "Boîte à outils", back: "RETOUR", r_h: "Mètre de rouleau", r_p: "Calculer longueur", r_d1: "Diamètre", r_d2: "Noyau", r_s: "Épaisseur", res_l: "Longueur calc.", n_h: "Calcul de pose", n_p: "Optimisation", g_h: "Détecteur de poids", g_p: "Densité", w_h: "Charge du vent", w_p: "Statique", h_h: "Ourlet Pro", h_p: "Allocation" },
+        es: { mainH: "Caja de herramientas", back: "VOLVER", r_h: "Metros de rollo", r_p: "Calcular longitud", r_d1: "Diámetro", r_d2: "Núcleo", r_s: "Espesor", res_l: "Longitud calc.", n_h: "Calculador de uso", n_p: "Optimización", g_h: "Detector de peso", g_p: "Densidad", w_h: "Carga de viento", w_p: "Estática", h_h: "Dobladillo Pro", h_p: "Margen" },
+        it: { mainH: "Cassetta degli attrezzi", back: "INDIETRO", r_h: "Metri del rullo", r_p: "Calcola lunghezza", r_d1: "Diametro", r_d2: "Nucleo", r_s: "Spessore", res_l: "Lunghezza calc.", n_h: "Calcolo resa", n_p: "Ottimizzazione", g_h: "Rilevatore peso", g_p: "Densità", w_h: "Carico del vento", w_p: "Statica", h_h: "Orlo Pro", h_p: "Margine" },
+        nl: { mainH: "Gereedschapskist", back: "TERUG", r_h: "Rolmeter", r_p: "Lengte berekenen", r_d1: "Diameter", r_d2: "Kern", r_s: "Dikte", res_l: "Berekende lengte", n_h: "Nuttige rekenmachine", n_p: "Optimalisatie", g_h: "Gewichtsdetector", g_p: "Dichtheid", w_h: "Windbelasting", w_p: "Statica", h_h: "Zoom Pro", h_p: "Toelage" },
+        pl: { mainH: "Przybornik", back: "POWRÓT", r_h: "Metromierz rolek", r_p: "Oblicz długość", r_d1: "Średnica", r_d2: "Rdzeń", r_s: "Grubość", res_l: "Obliczona dł.", n_h: "Kalkulator użytków", n_p: "Optymalizacja", g_h: "Detektor wagi", g_p: "Gęstość", w_h: "Obciążenie wiatrem", w_p: "Statyka", h_h: "Obszycie Pro", h_p: "Naddatek" },
+        ru: { mainH: "Инструменты", back: "НАЗАД", r_h: "Рулон-метр", r_p: "Расчет длины", r_d1: "Диаметр", r_d2: "Керн", r_s: "Толщина", res_l: "Расчетная длина", n_h: "Расчет раскладки", n_p: "Оптимизация", g_h: "Детектор веса", g_p: "Плотность", w_h: "Ветровая нагрузка", w_p: "Статика", h_h: "Подгиб Pro", h_p: "Припуск" },
+        da: { mainH: "Værktøjskasse", back: "TILBAGE", r_h: "Rullemåler", r_p: "Beregn længde", r_d1: "Diameter", r_d2: "Kerne", r_s: "Tykkelse", res_l: "Beregnet længde", n_h: "Nytteværdi", n_p: "Optimering", g_h: "Vægtdetektor", g_p: "Massefylde", w_h: "Vindbelastning", w_p: "Statik", h_h: "Søm Pro", h_p: "Tillæg" },
+        no: { mainH: "Verktøykasse", back: "TILBAKE", r_h: "Rullemåler", r_p: "Beregn lengde", r_d1: "Diameter", r_d2: "Kjerne", r_s: "Tykkelse", res_l: "Beregnet lengde", n_h: "Nyttekalkulator", n_p: "Optimalisering", g_h: "Vektdetektor", g_p: "Tetthet", w_h: "Vindlast", w_p: "Statikk", h_h: "Fald Pro", h_p: "Tillegg" },
+        ja: { mainH: "ツールボックス", back: "戻る", r_h: "ロールメーター", r_p: "長さ計算", r_d1: "直径", r_d2: "芯の直径", r_s: "厚さ", res_l: "計算された長さ", n_h: "ネスティング計算", n_p: "レイアウト最適化", g_h: "重量検出器", g_p: "材料密度", w_h: "風荷重", w_p: "静的チェック", h_h: "ヘムプロ", h_p: "バナー許容値" }
+    };
+
+    const infos = {
+        bt: "BT-HID Anleitung: 1. Gerät einschalten. 2. Bluetooth am Tablet aktivieren. 3. 'WGM-Scanner' wählen. Daten werden direkt in das aktive Feld übertragen.",
+        rollen: "Berechnet die Restmeter basierend auf dem Wickelvolumen. Formel: L = π * (D² - d²) / (4 * s).",
+        nutzen: "Optimiert die Anzahl der Schilder auf einer Platte unter Berücksichtigung der Schnittbreite.",
+        gew: "Berechnet das Gewicht basierend auf spezifischer Dichte (g/cm³).",
+        wind: "Berechnet die Last in Newton (N). Mesh-Faktor reduziert die Fläche (z.B. 0.3 für 70% winddurchlässig).",
+        hohl: "Umfangsberechnung: (Durchmesser * π) + Sicherheitszugabe."
     };
 
     function getT(l, k) { return i18n[l]?.[k] || i18n['en'][k] || k; }
 
-    function updateAllUnits() {
-        const u = document.getElementById('uG').value;
-        const l = document.getElementById('lG').value;
-        document.querySelectorAll('[data-u]').forEach(el => {
-            let base = getT(l, el.getAttribute('data-t'));
-            el.innerText = `${base} (${u})`;
-        });
-        calcR(); // Und weitere Rechenfunktionen...
-    }
+    function updateUnits() { calcR(); calcN(); calcG(); calcW(); calcH(); }
 
     function changeLang() {
         const l = document.getElementById('lG').value;
-        document.querySelectorAll('[data-t]').forEach(el => {
-            if(!el.hasAttribute('data-u')) el.innerText = getT(l, el.getAttribute('data-t'));
-        });
-        updateAllUnits();
+        document.querySelectorAll('[data-t]').forEach(el => { el.innerText = getT(l, el.getAttribute('data-t')); });
         lucide.createIcons();
     }
 
-    function calcR() {
-        let D=parseFloat(document.getElementById('rD').value||0), 
-            d=parseFloat(document.getElementById('rd').value||0), 
-            s=parseFloat(document.getElementById('rs').value||0)/1000;
-        if(D && d && s) {
-            let L = (Math.PI * (Math.pow(D/2, 2) - Math.pow(d/2, 2))) / s / 1000;
-            document.getElementById('resR').innerText = L.toFixed(2) + (document.getElementById('uG').value === 'mm' ? " m" : " ft");
-        }
+    function showInfo(key) {
+        document.getElementById('info-text').innerText = infos[key];
+        document.getElementById('info-popup').style.display = 'flex';
     }
 
     function go(v) {
@@ -130,13 +195,41 @@
         lucide.createIcons();
     }
 
+    function calcR() {
+        let D=parseFloat(document.getElementById('rD').value||0), d=parseFloat(document.getElementById('rd').value||0), s=parseFloat(document.getElementById('rs').value||0)/1000;
+        if(D && d && s) {
+            let L = (Math.PI * (Math.pow(D, 2) - Math.pow(d, 2))) / (4000 * s);
+            document.getElementById('resR').innerText = L.toFixed(2) + (document.getElementById('uG').value === 'mm' ? " m" : " ft");
+        }
+    }
+
+    function calcN() {
+        let pW=parseFloat(document.getElementById('pW').value), pH=parseFloat(document.getElementById('pH').value), gap=parseFloat(document.getElementById('gap').value), nW=parseFloat(document.getElementById('nW').value), nH=parseFloat(document.getElementById('nH').value);
+        if(nW && nH) {
+            let count = Math.max(Math.floor((pW+gap)/(nW+gap)) * Math.floor((pH+gap)/(nH+gap)), Math.floor((pW+gap)/(nH+gap)) * Math.floor((pH+gap)/(nW+gap)));
+            document.getElementById('resN').innerText = count;
+        }
+    }
+
+    function calcG() {
+        let dens = parseFloat(document.getElementById('gM').value), s = parseFloat(document.getElementById('gs').value);
+        document.getElementById('resG').innerText = (dens * s).toFixed(2) + " kg";
+    }
+
+    function calcW() {
+        let a = parseFloat(document.getElementById('wA').value), m = parseFloat(document.getElementById('wM').value);
+        document.getElementById('resW').innerText = Math.round(a * m * 600) + " N";
+    }
+
+    function calcH() {
+        let d = parseFloat(document.getElementById('hd').value);
+        document.getElementById('resH').innerText = Math.round(d * Math.PI + 20) + " mm";
+    }
+
     let clks = 0;
     document.getElementById('logo-trigger').addEventListener('click', () => {
         clks++;
-        if (clks === 5) {
-            document.getElementById('egg-popup').style.display='flex';
-            setTimeout(() => { document.getElementById('egg-popup').style.display='none'; clks=0; }, 4000);
-        }
+        if (clks === 5) { document.getElementById('egg-popup').style.display='flex'; setTimeout(() => { document.getElementById('egg-popup').style.display='none'; clks=0; }, 4000); }
     });
 
     window.onload = () => { changeLang(); lucide.createIcons(); };
