@@ -1,22 +1,22 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>GS Master-Tool | Floating Edition Final</title>
+    <title>WGM Master-Tool | GRÖNER SCHULZE</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
-            /* GS-DNA: Dunkle Shell auf weißem Grund - Korrigierter Farbton */
-            --wd-accent: #3b82f6;
-            --wd-blue: #3b82f6;
-            --wd-dark: #ffffff; /* Text in der Shell weiß */
-            --bg-body: #ffffff; /* Hintergrund außerhalb der App weiß */
-            --bg-shell: #1e293b; /* Korrigierter, tiefer Dunkelblau-Ton für die Shell */
+            /* GS-Farbpalette - logisch verknüpft mit V4.1.0 Admin-Reglern */
+            --wd-orange: #3b82f6; 
+            --wd-blue: #3b82f6; 
+            --wd-dark: #ffffff;
+            --bg-body: #ffffff; 
+            --bg-shell: #1e293b; 
             --card-bg: #334155;
-            --icon-bg: #1e293b;
-            --label-color: #ffffff;
-            --border-color: #475569;
+            --icon-bg: #1e293b; 
+            --label-color: #ffffff; 
             --app-width: 320px;
         }
         html, body { 
@@ -26,7 +26,7 @@
         }
         .app-shell {
             width: var(--app-width); height: 95vh; max-height: 780px;
-            background: var(--bg-shell); color: var(--wd-dark);
+            background: var(--bg-shell); color: #ffffff;
             display: flex; flex-direction: column; overflow: hidden;
             border-radius: 40px; position: relative; 
             box-shadow: 0 50px 100px rgba(15, 23, 42, 0.4); 
@@ -35,15 +35,15 @@
         
         #login-overlay { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(30,41,59,0.98); 
-            display: none; flex-direction: column; justify-content: center; align-items: center; 
+            background: rgba(30,41,59,0.98); display: none; 
+            flex-direction: column; justify-content: center; align-items: center; 
             z-index: 3000; backdrop-filter: blur(15px); 
         }
         #login-overlay .btn-action { max-width: 160px; height: 48px !important; flex: none; font-size: 0.8rem; }
 
         .assist-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 215px;
-            background: var(--wd-accent); color: white; z-index: 2000;
+            background: var(--wd-orange); color: white; z-index: 2000;
             display: none; flex-direction: column; justify-content: center;
             padding: 45px 20px 20px; box-sizing: border-box;
             border-bottom: 4px solid #ffffff;
@@ -53,71 +53,72 @@
         .assist-overlay p { margin: 0; font-size: 0.72rem; font-weight: 700; line-height: 1.5; }
 
         .top-nav { display: flex; justify-content: flex-end; padding: 25px 20px 5px; height: 35px; z-index: 2500; position: relative; }
-        select { background: var(--card-bg); color: #ffffff; border: 1px solid var(--border-color); padding: 6px; border-radius: 8px; font-weight: 800; font-size: 0.65rem; outline: none; }
+        select { background: #334155; color: white; border: 1px solid #475569; padding: 6px; border-radius: 8px; font-weight: 800; font-size: 0.65rem; outline: none; }
         
         .logo-area { text-align: center; padding: 5px 20px; height: 160px; position: relative; }
         .logo-area img { max-width: 145px; cursor: pointer; }
         .logo-area h1 { font-size: 0.85rem; letter-spacing: 0.5px; margin: 8px 0 5px; font-weight: 900; text-transform: uppercase; color: #ffffff; }
-        .admin-title { font-size: 0.78rem; color: var(--wd-accent); font-weight: 900; margin-bottom: 12px; text-transform: uppercase; display: none; }
-        .divider { height: 3px; background: var(--wd-accent); border-radius: 2px; width: 100%; }
+        .admin-title { font-size: 0.78rem; color: var(--wd-orange); font-weight: 900; margin-bottom: 12px; text-transform: uppercase; display: none; }
+        .divider { height: 3px; background: var(--wd-orange); border-radius: 2px; width: 100%; }
 
         .view { display: none; flex-direction: column; padding: 10px 20px; flex: 1; overflow-y: auto; }
         .view.active { display: flex; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .card { 
             background: var(--card-bg); height: 78px; border-radius: 22px; padding: 0 16px; 
             display: flex; align-items: center; gap: 14px; cursor: pointer; margin-bottom: 12px; 
             border: 1px solid rgba(255,255,255,0.05); 
-            box-shadow: 0 12px 30px rgba(0,0,0,0.2); 
+            box-shadow: 0 12px 30px rgba(0,0,0,0.3); 
             transition: transform 0.2s;
         }
         .card:active { transform: translateY(2px); }
-        .icon { width: 44px; height: 44px; background: rgba(15, 23, 42, 0.4); color: var(--wd-accent); border-radius: 14px; display: flex; align-items: center; justify-content: center; }
+        .icon { width: 44px; height: 44px; background: rgba(15,23,42,0.4); color: var(--wd-orange); border-radius: 14px; display: flex; align-items: center; justify-content: center; }
         .card-text h2 { margin: 0; font-size: 0.82rem; font-weight: 900; text-transform: uppercase; color: #ffffff; }
         .card-text p { margin: 2px 0 0; font-size: 0.62rem; color: #94a3b8; font-weight: 600; }
 
         .mod-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; height: 35px; }
-        .help-btn { width: 34px; height: 34px; color: var(--wd-accent); display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; background: transparent; }
+        .help-btn { width: 34px; height: 34px; color: var(--wd-orange); display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; background: transparent; }
         .help-btn.active { color: #ffffff; }
 
         .input-box { margin-bottom: 12px; height: 65px; position: relative; }
         .label { font-size: 0.6rem; color: var(--label-color); font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 4px; }
-        input, select.in-view { width: 100%; height: 42px; padding: 0 12px; border-radius: 12px; border: 2.5px solid var(--card-bg); font-size: 0.88rem; font-weight: 800; outline: none; background: #0f172a; color: white; box-sizing: border-box; }
-        input:focus { border: 3.5px solid var(--wd-accent) !important; }
+        input, select.in-view { width: 100%; height: 42px; padding: 0 12px; border-radius: 12px; border: 2.5px solid #334155; font-size: 0.88rem; font-weight: 800; outline: none; background: #0f172a; color: white; box-sizing: border-box; }
+        input:focus { border: 3.5px solid var(--wd-orange) !important; box-shadow: 0 0 12px rgba(59, 130, 246, 0.2); }
 
-        .res-card { background: var(--wd-accent); height: 85px; border-radius: 22px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 10px 0; color: white; box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3); }
+        .res-card { background: var(--wd-orange); height: 85px; border-radius: 22px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 10px 0; color: white; box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4); }
         .res-num { font-size: 1.8rem; font-weight: 900; }
         .res-info { font-size: 0.58rem; font-weight: 800; text-transform: uppercase; opacity: 0.9; }
 
         .back-btn { color: #94a3b8; display: flex; align-items: center; gap: 4px; cursor: pointer; font-weight: 900; font-size: 0.68rem; }
         .btn-row { display: flex; gap: 10px; margin-top: 5px; height: 48px; width: 100%; align-items: center; }
-        .btn-action { background: var(--wd-accent); color: white; border: none; flex: 1; border-radius: 14px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; text-transform: uppercase; font-size: 0.58rem; height: 48px; }
+        .btn-action { background: var(--wd-orange); color: white; border: none; flex: 1; border-radius: 14px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; text-transform: uppercase; font-size: 0.58rem; height: 48px; }
         
         .btn-reset { 
             width: 44px; height: 44px; border-radius: 12px; background: #1e293b; color: #94a3b8; 
-            border: 1.5px solid var(--border-color); cursor: pointer; display: flex; align-items: center; justify-content: center; flex: none; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.2s;
+            border: 1.5px solid #475569; cursor: pointer; display: flex; align-items: center; justify-content: center; flex: none; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: all 0.2s;
         }
-        .btn-reset:active { color: var(--wd-accent); }
+        .btn-reset:active { color: var(--wd-orange); }
 
         .admin-scroll { flex: 1; overflow-y: auto; padding-right: 5px; }
-        .admin-section { margin-bottom: 22px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; }
-        .admin-section h4 { font-size: 0.68rem; color: var(--wd-accent); text-transform: uppercase; margin-bottom: 10px; border-left: 3px solid var(--wd-accent); padding-left: 8px; }
+        .admin-section { margin-bottom: 22px; border-bottom: 1px solid #334155; padding-bottom: 12px; }
+        .admin-section h4 { font-size: 0.68rem; color: var(--wd-orange); text-transform: uppercase; margin-bottom: 10px; border-left: 3px solid var(--wd-orange); padding-left: 8px; }
 
         footer { text-align: center; padding: 10px 20px 25px; font-size: 0.58rem; color: #64748b; margin-top: auto; }
         footer strong { color: #ffffff; display: block; margin-bottom: 2px; }
-        .footer-links a { color: var(--wd-accent); text-decoration: none; font-weight: 800; margin: 0 8px; }
+        .footer-links a { color: var(--wd-orange); text-decoration: none; font-weight: 800; margin: 0 8px; }
     </style>
 </head>
 <body>
 
 <div class="app-shell">
     <div id="assist-overlay" class="assist-overlay" onclick="toggleAssist()">
-        <p id="assist-text">Details auswählen.</p>
+        <p id="assist-text">Wählen Sie ein Feld aus für Details.</p>
     </div>
 
     <div id="login-overlay">
-        <h3 style="color:var(--wd-accent); font-weight:900;">ADMIN MASTER-GATE</h3>
+        <h3 style="color:var(--wd-orange); font-weight:900;">ADMIN MASTER-GATE</h3>
         <input type="password" id="master-pin" placeholder="****" style="text-align:center; font-size:1.6rem; width:130px; letter-spacing:10px; margin-bottom: 25px;">
         <button class="btn-action" onclick="checkAccess()">ENTSPERREN</button>
         <p onclick="closeLogin()" style="margin-top:25px; font-size:0.6rem; cursor:pointer; font-weight:900; color:#94a3b8;">ABBRECHEN</p>
@@ -193,8 +194,12 @@
         <div class="mod-header"><div class="back-btn" onclick="go('main')"><i data-lucide="lock"></i> <span id="t-admin_exit">ADMIN VERLASSEN</span></div></div>
         <div class="admin-scroll">
             <div id="admin-global-config" class="admin-section">
-                <h4>Globale DNA (V4.0.5)</h4>
-                <label class="label">Firma</label><input type="text" id="cfg-brand" oninput="applyAdminLive()">
+                <h4>Globale DNA (V4.1.0-GS)</h4>
+                <label class="label">Hauptfarbe (Akzent)</label><input type="color" id="cfg-color" onchange="applyAdminLive()">
+                <label class="label" style="margin-top:10px;">Hintergrund (Shell)</label><input type="color" id="cfg-bg-shell" onchange="applyAdminLive()">
+                <label class="label" style="margin-top:10px;">Label-Farbe</label><input type="color" id="cfg-label-color" onchange="applyAdminLive()">
+                <label class="label" style="margin-top:10px;">Firma</label><input type="text" id="cfg-brand" oninput="applyAdminLive()">
+                <label class="label" style="margin-top:10px;">Versionsnummer</label><input type="text" id="cfg-ver-num" oninput="applyAdminLive()" placeholder="V4.1.0">
                 <label class="label" style="margin-top:10px;">Impressum URL</label><input type="text" id="cfg-link1" oninput="applyAdminLive()">
                 <label class="label" style="margin-top:10px;">Datenschutz URL</label><input type="text" id="cfg-link2" oninput="applyAdminLive()">
             </div>
@@ -203,37 +208,34 @@
                 <div id="admin-fields-list"></div>
             </div>
         </div>
-        <button class="btn-action" style="margin-top:20px;" onclick="saveDNA()">DNA VERSIEGELN</button>
+        <button class="btn-action" style="margin-top:20px; height:48px; flex:none; font-size:0.8rem;" onclick="saveDNA()">DNA VERSIEGELN</button>
     </div>
 
     <footer id="app-footer">
         <strong id="f-brand">Gröner Schulze</strong>
-        <span id="f-ver">V4.0.5 | GS-Float Final</span>
-        <div class="footer-links"><a id="f-l1" href="#">Impressum</a> | <a id="f-l2" href="#">Datenschutz</a></div>
+        <span id="f-ver">V4.1.0 | GS-Edition</span>
+        <div class="footer-links"><a id="f-l1" href="https://werbedruckgm.github.io/WGM">Impressum</a> | <a id="f-l2" href="https://werbedruckgm.github.io/WGM">Datenschutz</a></div>
     </footer>
 </div>
 
 <script>
-    /* ... (Der JavaScript-Teil bleibt identisch zur V4.0.4) ... */
-    let activeView = 'main', helpOn = false, clks = 0, tmr, adminCtx = 'main';
+    const VERSION = "4.1.0";
     const i18n = {
         de: {
             mainH: "GS Werbetechnik Tools", admin_exit: "ADMIN VERLASSEN", bt_btn: "BT MESSCHIEBER KOPPELN",
             rollen_h: "Rollen-Meter", nutzen_h: "Nutzen-Rechner", gew_h: "Gewichts-Rechner", wind_h: "Windlast-Rechner", hohl_h: "Hohlsaum-Rechner",
-            rollen_p: "Längen präzise berechnen", nutzen_p: "Plattennutzung optimieren", gew_p: "Materialgewicht ermitteln", wind_p: "Statik-Check für Außenwerbung", hohl_p: "Banner-Zulagen berechnen",
+            rollen_p: "Materiallängen präzise berechnen", nutzen_p: "Verschnittarme Schnittpläne", gew_p: "Materialgewicht ermitteln", wind_p: "Statik-Check für Außenwerbung", hohl_p: "Banner-Zulagen berechnen",
             back_r: "ZURÜCK", back_n: "ZURÜCK", back_g: "ZURÜCK", back_w: "ZURÜCK", back_h: "ZURÜCK",
             rD_l: "Durchmesser Außen", rd_l: "Kerndurchmesser", rs_l: "Materialstärke", res_l: "Material auf der Rolle",
             pW_l: "Plattenbreite", pH_l: "Plattenhöhe", cut_l: "Schnittbreite", sW_l: "Schildbreite", sH_l: "Schildhöhe", n_res: "Nutzen pro Platte",
             mat_l: "Datenbank (19 Werkstoffe)", gStd_l: "Presets", gb_l: "Breite", gh_l: "Höhe", g_res: "Gesamtgewicht", gs_l: "Stärke / Gramm",
             wMat_l: "Material-DNA", wb_l: "Breite", wh_l: "Höhe", w_res: "Windlast bei 120 km/h",
             hd_l: "Stangen Ø", hsd_l: "Materialdicke", h_p: "Hohlsaum-Zugabe",
-            h_rD: "Gesamtrolle messen.", h_rd: "Hülse messen.", h_rs: "Materialdicke.",
-            h_pW: "Rohbreite der Platte.", h_pH: "Rohhöhe der Platte.", h_cut: "Schnittverlust (Säge).",
-            h_sW: "Fertigbreite.", h_sH: "Fertighöhe.",
-            h_mat: "Material wählen.", h_gStd: "Standardstärken.", h_gs: "Stärke in mm oder kg/m².",
-            h_gb: "Breite.", h_gh: "Höhe.",
-            h_wMat: "Material-Faktor.", h_wb: "Breite.", h_wh: "Höhe.",
-            h_hd: "Stangendurchmesser.", h_hsd: "Bannerstärke."
+            h_rD: "Gesamte Rolle von Kante zu Kante messen.", h_rd: "Hülsendurchmesser.", h_rs: "Stärke einer Lage inkl. Träger.", h_pW: "Rohbreite der Platte.", h_pH: "Rohhöhe der Platte.",
+            h_cut: "Schnittverlust (Säge/Fräser).", h_sW: "Fertigbreite des Schildes.", h_sH: "Fertighöhe des Schildes.",
+            h_mat: "Material für Dichtewert wählen.", h_gStd: "Standardstärken wählen.", h_gs: "Stärke in mm oder kg/m².",
+            h_gb: "Objektbreite.", h_gh: "Objekthöhe.", h_wMat: "Werkstoff-Faktor wählen.",
+            h_wb: "Schildbreite.", h_wh: "Schildhöhe.", h_hd: "Stangendurchmesser.", h_hsd: "Bannerstärke."
         }
     };
     const materials = {
@@ -244,6 +246,7 @@
         'poly': { n: 'Polystyrol', d: 1.05, t: 'p', w: 1.0 }, 'stahl': { n: 'Stahlblech verzinkt', d: 7.8, t: 'p', w: 1.0 }, 'mag': { n: 'Magnetfolie', d: 3.5, t: 'r', w: 1.0 },
         'mesh': { n: 'Mesh Standard', d: 0.3, t: 'r', w: 0.6 }, 'mesh_p': { n: 'Mesh Wind-Pro', d: 0.25, t: 'r', w: 0.4 }, 'lkw': { n: 'LKW Plane (Frontlit)', d: 0.55, t: 'r', w: 1.0 }, 'block': { n: 'Blockout Banner', d: 0.8, t: 'r', w: 1.0 }
     };
+    let activeView = 'main', clks = 0, helpOn = false, btOn = false, tmr, adminCtx = 'main';
 
     function t(k) { return i18n.de[k] || "!!"; }
 
@@ -257,7 +260,12 @@
             al.style.display = 'none'; tit.style.display = 'block';
         }
         activeView = v; helpOn = false; document.getElementById('assist-overlay').style.display = 'none';
-        document.getElementById(v === 'admin' ? 'view-admin' : 'view-' + (v==='main'?'main':v)).classList.add('active');
+        const target = document.getElementById(v === 'admin' ? 'view-admin' : 'view-' + (v==='main'?'main':v));
+        target.classList.add('active');
+        if(v !== 'main' && v !== 'admin') {
+            const f = target.querySelector('input, select');
+            if(f) { setTimeout(() => { f.focus(); foc(f.id); }, 100); }
+        }
         updateUI();
     }
 
@@ -268,11 +276,12 @@
         if(helpOn) { const cur = document.activeElement; if(cur && cur.id) foc(cur.id); }
     }
 
-    function foc(id) { if(helpOn) document.getElementById('assist-text').innerText = t('h_' + id) || "Eingabe erforderlich."; }
+    function foc(id) { if(!id) return; document.getElementById('assist-text').innerText = t('h_' + id) || "Eingabe erforderlich."; }
     function jump(nextId) { const n = document.getElementById(nextId); if(n) n.focus(); }
 
     function updateUI() {
-        if(activeView !== 'admin') document.getElementById('app-title').innerText = (activeView === 'main') ? t('mainH') : t(activeView + '_h');
+        const u = document.getElementById('uG').value;
+        if(activeView !== 'admin') { document.getElementById('app-title').innerText = (activeView === 'main') ? t('mainH') : t(activeView + '_h'); }
         document.querySelectorAll('[id^="t-"]').forEach(el => {
             const k = el.id.replace('t-', ''); el.innerText = t(k);
             if(el.hasAttribute('data-u')) el.innerText += ` (${u})`;
@@ -309,26 +318,40 @@
     function closeLogin() { document.getElementById('login-overlay').style.display='none'; }
 
     function openAdmin() {
-        const l=document.getElementById('admin-fields-list'), ctx=adminCtx; l.innerHTML='';
-        const list=(ctx==='main')?['rollen_h','nutzen_h','gew_h','wind_h','hohl_h']:[ctx+'_h'];
-        list.forEach(k=>{ if(i18n.de[k]) l.innerHTML+=`<label class="label">${k}</label><input type="text" id="cfg-${k}" value="${i18n.de[k]}" oninput="applyAdminLive()" style="margin-bottom:12px;">`; });
+        const r = document.documentElement; const stl = getComputedStyle(r);
+        document.getElementById('cfg-color').value = stl.getPropertyValue('--wd-orange').trim();
+        document.getElementById('cfg-bg-shell').value = stl.getPropertyValue('--bg-shell').trim();
+        document.getElementById('cfg-label-color').value = stl.getPropertyValue('--label-color').trim();
         document.getElementById('cfg-brand').value = document.getElementById('f-brand').innerText;
+        document.getElementById('cfg-ver-num').value = document.getElementById('f-ver').innerText;
         document.getElementById('cfg-link1').value = document.getElementById('f-l1').href;
         document.getElementById('cfg-link2').value = document.getElementById('f-l2').href;
+        const l=document.getElementById('admin-fields-list'); l.innerHTML='';
+        const list=(adminCtx==='main')?['rollen_h','nutzen_h','gew_h','wind_h','hohl_h']:[adminCtx+'_h','back_'+adminCtx.charAt(0)];
+        list.forEach(k=>{ if(i18n.de[k]) l.innerHTML+=`<label class="label">${k}</label><input type="text" id="cfg-${k}" value="${i18n.de[k]}" oninput="applyAdminLive()" style="margin-bottom:12px;">`; });
     }
 
     function applyAdminLive() {
+        const r = document.documentElement;
+        r.style.setProperty('--wd-orange', document.getElementById('cfg-color').value);
+        r.style.setProperty('--bg-shell', document.getElementById('cfg-bg-shell').value);
+        r.style.setProperty('--label-color', document.getElementById('cfg-label-color').value);
         document.getElementById('f-brand').innerText = document.getElementById('cfg-brand').value;
+        document.getElementById('f-ver').innerText = document.getElementById('cfg-ver-num').value;
         document.getElementById('f-l1').href = document.getElementById('cfg-link1').value;
         document.getElementById('f-l2').href = document.getElementById('cfg-link2').value;
         document.querySelectorAll('[id^="cfg-"]').forEach(el => { const k=el.id.replace('cfg-',''); if(i18n.de[k]!==undefined) i18n.de[k]=el.value; });
         updateUI();
     }
 
-    function saveDNA() { localStorage.setItem('gs_v405', JSON.stringify({ f: document.getElementById('f-brand').innerText })); alert("DNA VERSIEGELT"); }
+    function saveDNA() { localStorage.setItem('gs_v410_master', JSON.stringify({ c: document.getElementById('cfg-color').value, b: document.getElementById('cfg-bg-shell').value, l: document.getElementById('cfg-label-color').value, f: document.getElementById('f-brand').innerText, v: document.getElementById('f-ver').innerText })); alert("DNA VERSIEGELT"); }
 
     window.onload = () => {
-        const s = localStorage.getItem('gs_v405'); if(s) { document.getElementById('f-brand').innerText = JSON.parse(s).f; }
+        const s = localStorage.getItem('gs_v410_master'); if(s) { 
+            const d = JSON.parse(s); const r = document.documentElement;
+            r.style.setProperty('--wd-orange', d.c); r.style.setProperty('--bg-shell', d.b); r.style.setProperty('--label-color', d.l);
+            document.getElementById('f-brand').innerText = d.f; document.getElementById('f-ver').innerText = d.v; 
+        }
         updateUI();
     };
 </script>
