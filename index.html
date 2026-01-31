@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>GS Master-Tool | GRÖNER SCHULZE</title>
+    <title>WGM Master-Tool | GRÖNER SCHULZE</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
@@ -131,12 +131,14 @@
         <div class="card" onclick="go('rollen')"><div class="icon"><i data-lucide="ruler"></i></div><div class="card-text"><h2 id="t-rollen_h">Rollen-Meter</h2><p id="t-rollen_p">Längen berechnen</p></div></div>
         <div class="card" onclick="go('nutzen')"><div class="icon"><i data-lucide="layout-grid"></i></div><div class="card-text"><h2 id="t-nutzen_h">Nutzen-Rechner</h2><p id="t-nutzen_p">Schnittpläne</p></div></div>
         <div class="card" onclick="go('gew')"><div class="icon"><i data-lucide="weight"></i></div><div class="card-text"><h2 id="t-gew_h">Gewichts-Rechner</h2><p id="t-gew_p">Materialgewicht</p></div></div>
+        <div class="card" onclick="go('wind')"><div class="icon"><i data-lucide="wind"></i></div><div class="card-text"><h2 id="t-wind_h">Windlast-Rechner</h2><p id="t-wind_p">Statik-Check</p></div></div>
+        <div class="card" onclick="go('hohl')"><div class="icon"><i data-lucide="maximize"></i></div><div class="card-text"><h2 id="t-hohl_h">Hohlsaum-Rechner</h2><p id="t-hohl_p">Banner-Zulage</p></div></div>
     </main>
 
     <div id="view-rollen" class="view">
         <div class="mod-header"><div class="back-btn" onclick="go('main')"><i data-lucide="chevron-left"></i> <span id="t-back_r">ZURÜCK</span></div><div class="help-btn" onclick="toggleAssist()"><i data-lucide="help-circle"></i></div></div>
-        <div class="input-box"><span class="label" id="t-rD_l" data-u>Durchmesser Außen</span><input type="number" id="rD" onfocus="foc('rD')" oninput="calcR()"></div>
-        <div class="input-box"><span class="label" id="t-rd_l" data-u>Kerndurchmesser</span><input type="number" id="rd" value="76" onfocus="foc('rd')" oninput="calcR()"></div>
+        <div class="input-box"><span class="label" id="t-rD_l" data-u>Durchmesser Außen</span><input type="number" id="rD" onfocus="foc('rD')" oninput="calcR()" onchange="jump('rd')"></div>
+        <div class="input-box"><span class="label" id="t-rd_l" data-u>Kerndurchmesser</span><input type="number" id="rd" value="76" onfocus="foc('rd')" oninput="calcR()" onchange="jump('rs')"></div>
         <div class="input-box"><span class="label" id="t-rs_l" data-u>Materialstärke</span><input type="number" id="rs" value="0.22" step="0.01" onfocus="foc('rs')" oninput="calcR()"></div>
         <div class="res-card"><span id="resR" class="res-num">0.00 m</span><span class="res-info" id="t-res_l">Material auf der Rolle</span></div>
         <div class="btn-row">
@@ -149,12 +151,11 @@
         <div class="mod-header"><div class="back-btn" onclick="go('main')"><i data-lucide="lock"></i> <span id="t-admin_exit">ADMIN VERLASSEN</span></div></div>
         <div class="admin-scroll">
             <div id="admin-global-config" class="admin-section">
-                <h4>Globale DNA (V4.1.0)</h4>
+                <h4>Globale DNA (V4.0.2-GS)</h4>
                 <label class="label">Hauptfarbe (Akzent)</label><input type="color" id="cfg-color" onchange="applyAdminLive()">
-                <label class="label" style="margin-top:10px;">Hintergrund (Shell)</label><input type="color" id="cfg-bg-shell" onchange="applyAdminLive()">
-                <label class="label" style="margin-top:10px;">Label-Farbe</label><input type="color" id="cfg-label-color" onchange="applyAdminLive()">
                 <label class="label" style="margin-top:10px;">Firma</label><input type="text" id="cfg-brand" oninput="applyAdminLive()">
-                <label class="label" style="margin-top:10px;">Version</label><input type="text" id="cfg-ver-num" oninput="applyAdminLive()">
+                <label class="label" style="margin-top:10px;">Impressum URL</label><input type="text" id="cfg-link1" oninput="applyAdminLive()">
+                <label class="label" style="margin-top:10px;">Datenschutz URL</label><input type="text" id="cfg-link2" oninput="applyAdminLive()">
             </div>
             <div id="admin-local-config" class="admin-section">
                 <h4>Modul-Texte</h4>
@@ -166,23 +167,23 @@
 
     <footer id="app-footer">
         <strong id="f-brand">Gröner Schulze</strong>
-        <span id="f-ver">V4.1.0 | GS-Edition</span>
+        <span id="f-ver">V4.0.2 | GS-Edition</span>
         <div class="footer-links"><a id="f-l1" href="#">Impressum</a> | <a id="f-l2" href="#">Datenschutz</a></div>
     </footer>
 </div>
 
 <script>
-    const VERSION = "4.1.0";
     const i18n = {
         de: {
             mainH: "GS Werbetechnik Tools", admin_exit: "ADMIN VERLASSEN", bt_btn: "BT MESSCHIEBER KOPPELN",
-            rollen_h: "Rollen-Meter", nutzen_h: "Nutzen-Rechner", gew_h: "Gewichts-Rechner",
-            rollen_p: "Längen präzise berechnen", nutzen_p: "Plattennutzung optimieren", gew_p: "Gewicht ermitteln",
-            back_r: "ZURÜCK", back_n: "ZURÜCK", back_g: "ZURÜCK",
+            rollen_h: "Rollen-Meter", nutzen_h: "Nutzen-Rechner", gew_h: "Gewichts-Rechner", wind_h: "Windlast-Rechner", hohl_h: "Hohlsaum-Rechner",
+            rollen_p: "Längen präzise berechnen", nutzen_p: "Plattennutzung optimieren", gew_p: "Materialgewicht ermitteln", wind_p: "Statik-Check für Außenwerbung", hohl_p: "Banner-Zulagen berechnen",
+            back_r: "ZURÜCK", back_n: "ZURÜCK", back_g: "ZURÜCK", back_w: "ZURÜCK", back_h: "ZURÜCK",
             rD_l: "Durchmesser Außen", rd_l: "Kerndurchmesser", rs_l: "Materialstärke", res_l: "Material auf der Rolle",
             h_rD: "Gesamtrolle messen.", h_rd: "Hülse messen.", h_rs: "Materialdicke."
         }
     };
+    let activeView = 'main', helpOn = false, clks = 0, tmr, adminCtx = 'main';
 
     function t(k) { return i18n.de[k] || "!!"; }
 
@@ -207,6 +208,7 @@
     }
 
     function foc(id) { if(helpOn) document.getElementById('assist-text').innerText = t('h_' + id) || "Eingabe erforderlich."; }
+    function jump(nextId) { const n = document.getElementById(nextId); if(n) n.focus(); }
 
     function updateUI() {
         const u = document.getElementById('uG').value;
@@ -231,35 +233,25 @@
     function openAdmin() {
         const r = document.documentElement;
         document.getElementById('cfg-color').value = getComputedStyle(r).getPropertyValue('--wd-accent').trim();
-        document.getElementById('cfg-bg-shell').value = getComputedStyle(r).getPropertyValue('--bg-shell').trim();
-        document.getElementById('cfg-label-color').value = getComputedStyle(r).getPropertyValue('--label-color').trim();
         document.getElementById('cfg-brand').value = document.getElementById('f-brand').innerText;
-        document.getElementById('cfg-ver-num').value = document.getElementById('f-ver').innerText;
     }
 
     function applyAdminLive() {
         const r = document.documentElement;
         r.style.setProperty('--wd-accent', document.getElementById('cfg-color').value);
-        r.style.setProperty('--bg-shell', document.getElementById('cfg-bg-shell').value);
-        r.style.setProperty('--label-color', document.getElementById('cfg-label-color').value);
         document.getElementById('f-brand').innerText = document.getElementById('cfg-brand').value;
-        document.getElementById('f-ver').innerText = document.getElementById('cfg-ver-num').value;
+        updateUI();
     }
 
-    function saveDNA() { 
-        const dna = { c: document.getElementById('cfg-color').value, b: document.getElementById('cfg-bg-shell').value, l: document.getElementById('cfg-label-color').value, f: document.getElementById('f-brand').innerText, v: document.getElementById('f-ver').innerText };
-        localStorage.setItem('gs_v410', JSON.stringify(dna)); alert("DNA VERSIEGELT"); 
-    }
+    function saveDNA() { localStorage.setItem('gs_v402', JSON.stringify({ c: document.getElementById('cfg-color').value, f: document.getElementById('f-brand').innerText })); alert("DNA VERSIEGELT"); }
 
     window.onload = () => {
-        const s = localStorage.getItem('gs_v410'); if(s) { 
+        const s = localStorage.getItem('gs_v402'); if(s) { 
             const d = JSON.parse(s); const r = document.documentElement;
-            r.style.setProperty('--wd-accent', d.c); r.style.setProperty('--bg-shell', d.b); r.style.setProperty('--label-color', d.l);
-            document.getElementById('f-brand').innerText = d.f; document.getElementById('f-ver').innerText = d.v; 
+            r.style.setProperty('--wd-accent', d.c); document.getElementById('f-brand').innerText = d.f; 
         }
         updateUI();
     };
 </script>
 </body>
 </html>
-
