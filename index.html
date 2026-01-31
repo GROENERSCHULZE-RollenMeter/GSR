@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Werbedruck-GM Tools V2.2.5</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --brand-navy: #0E1D3A; 
+            --brand-navy-light: #162a50;
+            --brand-cyan: #1DA1F2; 
+            --app-width: 320px;
+        }
+        html, body { 
+            height: 100%; margin: 0; padding: 0; background: #ffffff; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex; justify-content: center; align-items: center; overflow: hidden;
+        }
+        .app-shell {
+            width: var(--app-width); height: 95vh; max-height: 780px;
+            background: radial-gradient(circle at top, var(--brand-navy-light) 0%, var(--brand-navy) 100%);
+            color: white; display: flex; flex-direction: column; overflow: hidden;
+            border-radius: 50px; position: relative; 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.25); 
+        }
+        #egg-popup { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(14, 29, 58, 0.98); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(8px); }
+        .egg-content { background: var(--brand-navy); border: 2px solid var(--brand-cyan); padding: 30px 20px; border-radius: 25px; text-align: center; width: 80%; }
+        .top-nav { display: flex; justify-content: space-between; padding: 35px 25px 5px; }
+        select { background: white; border: none; padding: 3px 8px; border-radius: 6px; font-weight: 800; font-size: 0.65rem; color: var(--brand-navy); outline: none; }
+        .logo-area { text-align: center; padding: 5px 0; }
+        .logo-area img { max-width: 90px; height: auto; margin-bottom: 2px; cursor: pointer; border-radius: 20px; }
+        .logo-area h1 { font-size: 0.85rem; letter-spacing: 0.8px; margin: 0; font-weight: 800; text-transform: uppercase; }
+        .view { display: none; flex-direction: column; padding: 10px 15px; flex: 1; overflow-y: auto; }
+        .view.active { display: flex; }
+        .card { background: white; border-radius: 18px; padding: 10px 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; color: var(--brand-navy); margin-bottom: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .icon { width: 34px; height: 34px; background: var(--brand-navy); color: var(--brand-cyan); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .card-text h2 { margin: 0; font-size: 0.85rem; font-weight: 800; }
+        .card-text p { margin: 0; font-size: 0.55rem; color: #64748b; font-weight: 600; }
+        .input-box { margin-bottom: 6px; }
+        .label { font-size: 0.5rem; color: var(--brand-cyan); font-weight: 800; text-transform: uppercase; margin-bottom: 2px; display: block; }
+        input, select.in-view { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid transparent; font-size: 0.8rem; font-weight: 700; color: var(--brand-navy); background: white; outline: none; }
+        .res-card { background: white; padding: 12px; border-radius: 18px; text-align: center; margin: 8px 0; color: var(--brand-navy); }
+        .res-num { font-size: 1.8rem; font-weight: 900; color: var(--brand-cyan); display: block; }
+        .res-info { font-size: 0.55rem; color: #718096; font-weight: 800; display: block; text-transform: uppercase; }
+        .back-btn { color: white; display: flex; align-items: center; gap: 4px; cursor: pointer; padding-bottom: 10px; font-weight: 800; font-size: 0.7rem; }
+        footer { text-align: center; padding: 5px 15px 25px; font-size: 0.55rem; color: #94a3b8; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+<div class="app-shell">
+    <div id="egg-popup"><div class="egg-content">Powered by<br><strong style="color:var(--brand-cyan); font-size:1.4rem;">Werbedruck-GM</strong><br><br>DER MEISTER</div></div>
+
+    <div class="top-nav">
+        <select id="uG" onchange="updateAllUnits()"><option value="mm">mm/m/kg</option><option value="inc">inc/ft/lbs</option></select>
+        <select id="lG" onchange="changeLang()">
+            <option value="de">DE</option><option value="en">EN</option><option value="fr">FR</option>
+            <option value="es">ES</option><option value="it">IT</option><option value="nl">NL</option>
+            <option value="pl">PL</option><option value="ru">RU</option><option value="da">DA</option>
+            <option value="no">NO</option><option value="ja">JP</option>
+        </select>
+    </div>
+
+    <div class="logo-area"><img src="GS-Logo.jpg" id="logo-trigger" alt="Logo"><h1 data-t="mainH">Werbedruck-GM Tools</h1></div>
+
+    <main id="main" class="view active">
+        <div class="card" onclick="go('rollen')"><div class="icon"><i data-lucide="ruler"></i></div><div class="card-text"><h2 data-t="r_h">Rollen-Meter</h2><p data-t="r_p">Restmeter berechnen</p></div></div>
+        <div class="card" onclick="go('nutzen')"><div class="icon"><i data-lucide="layout-grid"></i></div><div class="card-text"><h2 data-t="n_h">Nutzen-Rechner</h2><p data-t="n_p">Schnittplan-Optimierung</p></div></div>
+        <div class="card" onclick="go('gew')"><div class="icon"><i data-lucide="weight"></i></div><div class="card-text"><h2 data-t="g_h">Gewichts-Detektor</h2><p data-t="g_p">Materialdichte Kalkulation</p></div></div>
+        <div class="card" onclick="go('wind')"><div class="icon"><i data-lucide="wind"></i></div><div class="card-text"><h2 data-t="w_h">Windlast-Prüfer</h2><p data-t="w_p">Statik & Mesh-Faktor</p></div></div>
+        <div class="card" onclick="go('hohl')"><div class="icon"><i data-lucide="maximize"></i></div><div class="card-text"><h2 data-t="h_h">Hohlsaum-Profi</h2><p data-t="h_p">Umfang-Zulage</p></div></div>
+    </main>
+
+    <div id="view-rollen" class="view">
+        <div class="back-btn" onclick="go('main')"><i data-lucide="chevron-left"></i> <span data-t="back">ZURÜCK</span></div>
+        <div class="input-box"><span class="label" data-t="r_d1" data-u>Durchmesser</span><input type="number" id="rD" value="150" oninput="calcR()"></div>
+        <div class="input-box"><span class="label" data-t="r_d2" data-u>Kern</span><input type="number" id="rd" value="76" oninput="calcR()"></div>
+        <div class="input-box"><span class="label" data-t="r_s" data-u>Stärke (µm)</span><input type="number" id="rs" value="150" oninput="calcR()"></div>
+        <div class="res-card"><span id="resR" class="res-num">0.00 m</span><span class="res-info" data-t="res_l">Berechnete Länge</span></div>
+    </div>
+
+    <footer>
+        <strong style="color:white;">WERBEDRUCK GM</strong>
+        <div style="opacity: 0.7;">V2.2.5 | Master-Export | © 2026</div>
+    </footer>
+</div>
+
+<script>
+    const i18n = {
+        de: { mainH: "Werbedruck-GM Tools", back: "ZURÜCK", r_h: "Rollen-Meter", r_p: "Restmeter berechnen", r_d1: "Durchmesser", r_d2: "Kern", r_s: "Materialstärke", res_l: "Berechnete Länge", n_h: "Nutzen-Rechner", n_p: "Schnittplan-Optimierung", g_h: "Gewichts-Detektor", g_p: "Materialgewicht", w_h: "Windlast-Prüfer", w_p: "Statik-Check", h_h: "Hohlsaum-Profi", h_p: "Banner-Zulage" },
+        en: { mainH: "WGM Tools", back: "BACK", r_h: "Roll Meter", r_p: "Length calc", r_d1: "Diameter", r_d2: "Core", r_s: "Thickness", res_l: "Calculated Length", n_h: "Nesting Calc", n_p: "Cut Optimization", g_h: "Weight Detector", g_p: "Material mass", w_h: "Wind Load", w_p: "Static check", h_h: "Hem Pro", h_p: "Banner allowance" }
+        // Ergänzung der weiteren 9 Sprachen analog zur WGM-Matrix...
+    };
+
+    function getT(l, k) { return i18n[l]?.[k] || i18n['en'][k] || k; }
+
+    function updateAllUnits() {
+        const u = document.getElementById('uG').value;
+        const l = document.getElementById('lG').value;
+        document.querySelectorAll('[data-u]').forEach(el => {
+            let base = getT(l, el.getAttribute('data-t'));
+            el.innerText = `${base} (${u})`;
+        });
+        calcR(); // Und weitere Rechenfunktionen...
+    }
+
+    function changeLang() {
+        const l = document.getElementById('lG').value;
+        document.querySelectorAll('[data-t]').forEach(el => {
+            if(!el.hasAttribute('data-u')) el.innerText = getT(l, el.getAttribute('data-t'));
+        });
+        updateAllUnits();
+        lucide.createIcons();
+    }
+
+    function calcR() {
+        let D=parseFloat(document.getElementById('rD').value||0), 
+            d=parseFloat(document.getElementById('rd').value||0), 
+            s=parseFloat(document.getElementById('rs').value||0)/1000;
+        if(D && d && s) {
+            let L = (Math.PI * (Math.pow(D/2, 2) - Math.pow(d/2, 2))) / s / 1000;
+            document.getElementById('resR').innerText = L.toFixed(2) + (document.getElementById('uG').value === 'mm' ? " m" : " ft");
+        }
+    }
+
+    function go(v) {
+        document.querySelectorAll('.view').forEach(e => e.classList.remove('active'));
+        document.getElementById(v === 'main' ? 'main' : 'view-' + v).classList.add('active');
+        lucide.createIcons();
+    }
+
+    let clks = 0;
+    document.getElementById('logo-trigger').addEventListener('click', () => {
+        clks++;
+        if (clks === 5) {
+            document.getElementById('egg-popup').style.display='flex';
+            setTimeout(() => { document.getElementById('egg-popup').style.display='none'; clks=0; }, 4000);
+        }
+    });
+
+    window.onload = () => { changeLang(); lucide.createIcons(); };
+</script>
+</body>
+</html>
